@@ -1,2 +1,2 @@
-# plate-recognizer
-App para ler placas de veículo
+# lista de supermercado
+lista de supermercado

@@ -23,20 +23,29 @@ class MainActivity : AppCompatActivity() {
     private var photoUri: Uri? = null
     private var photoFile: File? = null
 
-    private val takePictureLauncher =
-        registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
-            if (success && photoUri != null) {
-                photoUri?.let { uri ->
-                    val inputStream = contentResolver.openInputStream(uri)
-                    val bitmap = BitmapFactory.decodeStream(inputStream)
-                    binding.previewImage.setImageBitmap(bitmap)
-                    inputStream?.close()
-                    uploadPhoto(photoFile!!)
-                }
-            } else {
-                Toast.makeText(this, "Falha ao capturar foto", Toast.LENGTH_SHORT).show()
-            }
-        }
+	private val takePictureLauncher =
+		registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+			if (success && photoUri != null) {
+				photoUri?.let { uri ->
+					try {
+						val inputStream = contentResolver.openInputStream(uri)
+						val bitmap = BitmapFactory.decodeStream(inputStream)
+						binding.previewImage.setImageBitmap(bitmap)
+						inputStream?.close()
+						uploadPhoto(photoFile!!)
+					} catch (e: Exception) {
+						Toast.makeText(this, "Erro ao processar foto: ${e.message}", Toast.LENGTH_LONG).show()
+					}
+				}
+			} else {
+				val motivo = when {
+					!success -> "Câmera cancelada ou falha do app de câmera"
+					photoUri == null -> "URI da foto não foi gerada"
+					else -> "Motivo desconhecido"
+				}
+				Toast.makeText(this, "Falha: $motivo", Toast.LENGTH_LONG).show()
+			}
+		}
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->

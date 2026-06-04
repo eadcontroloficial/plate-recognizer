@@ -8,7 +8,7 @@
         android:allowBackup="true"
         android:icon="@android:mipmap/sym_def_app_icon"
         android:label="Plate Recognizer"
-        android:theme="@android:style/Theme.Material.Light">
+        android:theme="@style/Theme.PlateRecognizer">
 
         <activity
             android:name=".MainActivity"
@@ -19,7 +19,6 @@
             </intent-filter>
         </activity>
 
-        <!-- FileProvider para salvar foto temporária -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
